@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     netcat \
     pandoc \
     python-dev \
+    python3 \
+    python3-pip \
     texlive-fonts-extra \
     texlive-fonts-recommended \
     texlive-generic-recommended \
@@ -28,9 +30,20 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     texlive-latex-extra \
     texlive-xetex \
     unzip \
-    nano \
+    vim \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+    
+RUN pip3 install -r requirements.txt --upgrade
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER $NB_UID
+
+# Create a new system user
+RUN useradd -ms /bin/bash jupyter
+
+# Change to this new user
+USER jupyter
+
+# Start the jupyter notebook
+ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0"]
