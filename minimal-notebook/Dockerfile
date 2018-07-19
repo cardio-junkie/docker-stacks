@@ -36,11 +36,8 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     
 RUN pip3 install -r requirements.txt --upgrade
 
-# Create a new system user
-RUN useradd -ms /bin/bash jupyter
-
-# Change to this new user
-USER jupyter
+# Switch back to jovyan to avoid accidental container runs as root
+USER $NB_UID
 
 # Start the jupyter notebook
 ENTRYPOINT ["jupyter", "notebook", "--ip=0.0.0.0"]
