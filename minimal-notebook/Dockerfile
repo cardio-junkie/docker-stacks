@@ -36,9 +36,6 @@ RUN apt-get update && apt-get install -yq --no-install-recommends \
     
 RUN pip3 install -r requirements.txt --upgrade
 
-# Switch back to jovyan to avoid accidental container runs as root
-USER $NB_UID
-
 # Create a new system user
 RUN useradd -ms /bin/bash jupyter
 
